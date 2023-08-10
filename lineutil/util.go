@@ -1,3 +1,9 @@
+/* package lineutil surfaces some utilites for dealing with line ranges
+and reading ranges of lines from files
+
+Copyright © 2023 Charles <Asciifaceman> Corbett
+*/
+
 package lineutil
 
 import (
