@@ -71,7 +71,7 @@ func ReadLineFromFile(filename string, lineNum int) (string, error) {
 	return "", io.EOF
 }
 
-// ReadLineRangeFromFile returns lines from a given []int range
+// ReadLineRangeFromFile returns lines from a given filename in []int range
 func ReadLineRangeFromFile(filename string, lineRange []int) ([]string, error) {
 
 	r, err := os.Open(filename)

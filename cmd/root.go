@@ -105,11 +105,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.line.yaml)")
 	rootCmd.PersistentFlags().StringSliceVarP(&lineRange, "lines", "l", lineRange, "A line number or range of lines in the target file to print defined as N-N (ex. 12-15)")
 	rootCmd.PersistentFlags().BoolP("version", "v", false, "Print application version and exit")
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
