@@ -12,16 +12,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const VERSION = "0.1.1"
+
 var (
 	lineRange []string
-	version   = "dev"
-	build     = "dev"
+	version   = fmt.Sprintf("%s %s/%s", VERSION, runtime.GOOS, runtime.GOARCH)
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:                   "line -l n -l n-N filename",
 	DisableFlagsInUseLine: true,
+	Version:               version,
 	Short:                 "Read only specific lines or ranges of lines",
 	Long: `Read only specific lines or ranges of lines.
 Singleton and ranges are accepted by the lines flag. This can be in 
@@ -31,21 +33,9 @@ If the given range is not present at all in the file, it will return an EOF
 however if a partial range is present, it will print what it found and present
 an EOF warning to stderr
 
+The lines flag can be repeated indefinitely.
 	`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		v, err := cmd.Flags().GetBool("version")
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		if v {
-			fmt.Fprintln(os.Stdout, "Line utility")
-			fmt.Fprintf(os.Stdout, "Version: %s\n", version)
-			fmt.Fprintf(os.Stdout, "Build: %s\n", build)
-			fmt.Fprintf(os.Stdout, "OS/Arch: %s/%s\n", runtime.GOOS, runtime.GOARCH)
-			os.Exit(0)
-		}
-
 		if len(args) > 1 || len(args) < 1 {
 			cmd.Help()
 			os.Exit(0)
@@ -106,6 +96,6 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringSliceVarP(&lineRange, "lines", "l", lineRange, "A line number or range of lines in the target file to print defined as N-N (ex. 12-15)")
-	rootCmd.PersistentFlags().BoolP("version", "v", false, "Print application version and exit")
+	//rootCmd.PersistentFlags().BoolP("version", "v", false, "Print application version and exit")
 
 }
