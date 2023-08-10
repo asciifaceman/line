@@ -1,0 +1,74 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  # Allow manually triggering
+  # See: https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*.*.*"
+
+env:
+  GO_VER: 1.20.3
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VER }}
+
+      - name: Run tests
+        run: go test -v ./...
+
+  build_and_release:
+    name: Release line Binaries
+    runs-on: ubuntu-latest
+    permissions:
+      # Needed to actually create a release
+      contents: write
+
+    strategy:
+      matrix:
+        # build and publish in parallel for the *nix and mac families: linux/386, linux/amd64, linux/arm64, linux/arm, darwin/amd64, darwin/arm64
+        # Currently, native windows is untested with no plans to. WSL2 should suffice in a pinch.
+        ##
+        goos: [linux, darwin]
+        goarch: ["386", "amd64", "arm64", "arm"]
+        exclude:
+          # No 32 bit intel or ARM builds for macOS platforms
+          - goarch: "386"
+            goos: darwin
+          - goarch: "arm"
+            goos: darwin
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get current date
+        id: date
+        run: echo "build_datetime=$(date --iso-8601=s)" >> $GITHUB_OUTPUT
+      - name: Check current date
+        id: date-check
+        run: echo "The current date/time is ${{ steps.date.outputs.build_datetime }}"
+      - uses: wangyoucao577/go-release-action@v1.37
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          goversion: ${{ env.GO_VER }}
+          # Publish sha hashes, not md5
+          md5sum: false
+          sha256sum: true
+          # TODO: go all in on Makefile?
+          # build_command: make
+          ##
+          # Note: The go-release-action wraps all input here in double quotes. Any dynamic input is therefore sensitive to additional quotes/escape sequences added
+          #   to the value of the ${{var}} at the time var was created.
+          ldflags: -X github.com/asciifaceman/line/cmd.build=${{ steps.date.outputs.build_datetime }} -X github.com/asciifaceman/line/cmd.version=${{  github.ref_name }}
