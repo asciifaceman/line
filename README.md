@@ -49,3 +49,5 @@ error: failed to read line range [20 25] from file [main.go]: EOF
 
 * Naftuli Kay
     * Many thanks and inspiration for the project
+* Karl Q
+    * Helped me with the github workflows template that I'm reusing here
