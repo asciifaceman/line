@@ -1,7 +1,25 @@
 # Line
+![line logo](line.png)
 
 Line is a simple CLI utility for reading individual and ranges of lines from
 a given file
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/asciifaceman/line.svg)](https://pkg.go.dev/github.com/asciifaceman/line) ![build workflow](https://github.com/asciifaceman/line/actions/workflows/release-build.yml/badge.svg) ![latest PR workflow](https://github.com/asciifaceman/line/actions/workflows/pr-build.yml/badge.svg) ![repo license](https://img.shields.io/github/license/asciifaceman/line.svg) ![downloads](https://img.shields.io/github/release/asciifaceman/line.svg)
+
+
+# Installation
+
+## Go
+
+```
+go install github.com/asciifaceman/line@latest
+```
+
+## Non-go
+
+Binaries are provided in https://github.com/asciifaceman/line/releases for download
+
+Throw them in your `$PATH`
 
 # Usage
 
@@ -39,11 +57,11 @@ error: failed to read line range [20 25] from file [main.go]: EOF
 # TODO
 
 * Implement an os.File and os.Stdin split reader to support piping in
-* Packaging, builds
+* Work on go [packaging](https://pkg.go.dev/about#adding-a-package) QOL for go and non-go users
 
 # Authors
 
-* Charles <asciifaceman> Corbett
+* [Charles Corbett](https://github.com/asciifaceman)
 
 ### Honors
 
